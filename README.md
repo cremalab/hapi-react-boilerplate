@@ -21,7 +21,7 @@ A boilerplate project for a [Hapi](http://hapijs.com)-powered web/api server ser
 * `yarn dev` - wait a sec for webpack to build, then go to `localhost:8000`
 
 # Usage as a project template:
-* Run from project root: `rm -rf .git && rm -rf ./server/tasks && rm -rf ./client/src/store/actions/tasksAdd && rm -rf ./client/src/store/reducers/tasks && rm client/src/store/index.js && mv ./client/src/store/index_old.js ./client/src/store/index.js`
+* Run from project root: `rm -rf .git && rm -rf ./server/tasks && rm -rf ./client/src/store/actions/tasksAdd && rm -rf ./client/src/store/reducers/tasks && rm client/src/store/index.js && mv ./client/src/store/index_blank.js ./client/src/store/index.js`
 * remove `{ plugin: './server/tasks' }` line from `manifest.js`
 * Gut `client/src/RouteHome`
 
