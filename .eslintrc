@@ -1,0 +1,30 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "jest": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "plugins": [
+    "jest",
+    "react"
+  ],
+  "rules": {
+    "indent": ["error", 2, {SwitchCase: 1}],
+    "quotes": ["error", "single", {"allowTemplateLiterals": true}],
+    "semi": ["error", "never"],
+    "no-case-declarations": 2
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+}
