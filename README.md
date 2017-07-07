@@ -53,7 +53,10 @@ Create a plugin for each logical grouping of features for the application and re
 
 Docs to come...
 
-# TOOD
+# TODO
 * [ ] Example Smoke tests for React Components
+* [ ] Example tests for API routes
+* [ ] Docs on generating Swagger Docs
+* [ ] HMR
 * [ ] Basic Auth Plugin example
 * [ ] Documentation for React/Redux practices
