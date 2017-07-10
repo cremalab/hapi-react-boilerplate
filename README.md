@@ -139,7 +139,7 @@ This boilerplate was built to deploy to Heroku with little fuss. A `postinstall`
 
 # TODO
 * [ ] Example Smoke tests for React Components
-* [ ] Example tests for API routes
+* [x] Example tests for API routes
 * [x] Deployment docs
 * [x] Docs on generating Swagger Docs
 * [ ] HMR

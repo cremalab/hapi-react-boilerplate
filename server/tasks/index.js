@@ -5,9 +5,9 @@
 const tasksRoutes = require('./routes/tasksRoutes')
 
 const tasks = [
-  { completed: false, title: 'Clone boilerplate' },
-  { completed: false, title: 'Read README' },
-  { completed: false, title: 'Remove junk' },
+  { id: 1, completed: false, title: 'Clone boilerplate' },
+  { id: 2, completed: false, title: 'Read README' },
+  { id: 3, completed: false, title: 'Remove junk' },
 ]
 
 exports.register = (server, options, next) => {
