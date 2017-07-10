@@ -134,10 +134,14 @@ export default handleActions({
 * Use a named function `mapStateToProps`, defined immediately before the `export`, to...map state to props.
 * Use the second `connect` argument (`mapDispatchToProps`) with a destructured object with your imported action names. This allows you to call `tasksAdd(whatever)` instead of having to pass it to dispatch like `this.props.dispatch(tasksAdd(whatever))`, and it's easier to reason about.
 
+# Deployment
+This boilerplate was built to deploy to Heroku with little fuss. A `postinstall` npm command will build a production version of the app to be served from `client/build`. It should work as expected without any further configuration.
+
 # TODO
 * [ ] Example Smoke tests for React Components
 * [ ] Example tests for API routes
-* [ ] Docs on generating Swagger Docs
+* [x] Deployment docs
+* [x] Docs on generating Swagger Docs
 * [ ] HMR
 * [ ] Basic Auth Plugin example
 * [x] Documentation for React/Redux practices
