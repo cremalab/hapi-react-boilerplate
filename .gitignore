@@ -34,3 +34,7 @@ client/build
 client/build/index.html
 
 node_modules/
+
+#ide garbage
+.idea
+
