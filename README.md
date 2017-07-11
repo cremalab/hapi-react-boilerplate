@@ -17,8 +17,11 @@ A boilerplate project for a [Hapi](http://hapijs.com)-powered web/api server ser
 * Node still doesn't handle `import` well, so you'll need to use `require` on the server side and `import` on the client side.
 
 # Dev
-* `yarn install`
-* `yarn dev` - wait a sec for webpack to build, then go to `localhost:8000`
+* `npm install`
+* `npm run dev` - wait a sec for webpack to build, then go to `localhost:8000`
+
+# Tests
+* `npm run test` or `npm run test:watch`
 
 # Usage as a project template:
 * Run from project root: `rm -rf .git && rm -rf ./server/tasks && rm -rf ./client/src/store/actions/tasksAdd && rm -rf ./client/src/store/reducers/tasks && rm client/src/store/index.js && mv ./client/src/store/index_blank.js ./client/src/store/index.js`
