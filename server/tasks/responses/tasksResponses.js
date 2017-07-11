@@ -3,6 +3,7 @@ const Joi = require('joi')
 const task = Joi.object().keys({
   completed: Joi.bool().example(false),
   title: Joi.string().required().example('Provide response example'),
+  id: Joi.number().required().example(1),
 })
 
 module.exports = {
