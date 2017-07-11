@@ -7,6 +7,11 @@
   "plugins": [
     "syntax-dynamic-import",
     "transform-object-rest-spread",
+    ["import", {
+      "libraryName":"antd",
+      "libraryDirectory":"lib",
+      "style":"css"
+    }]
   ],
   "env": {
     "modules":false,

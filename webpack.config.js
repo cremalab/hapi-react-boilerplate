@@ -92,6 +92,7 @@ const developmentConfig = merge([
   parts.loadSVG(),
   parts.loadJavascript({include:PATHS.app, exclude: /(node_modules|bower_components)/}),
   parts.loadCSS(),
+  parts.loadLess()
 ])
 
 

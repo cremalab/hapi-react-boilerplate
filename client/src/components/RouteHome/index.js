@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { Button, DatePicker } from 'antd'
 
 import tasksAdd from '../../store/actions/tasksAdd'
 
@@ -15,6 +16,10 @@ class RouteHome extends Component {
     return (
       <div>
         <h1>Home component!</h1>
+        <p>An Ant button: </p>
+        <Button>BUTTON!</Button>
+        <Button type="danger">Danger BUTTON!</Button>
+        <DatePicker/>
         <ul>
           { list.map((t, i) => (
             <li key={i}>

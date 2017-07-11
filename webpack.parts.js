@@ -109,3 +109,14 @@ exports.loadCSS = ({ include, exclude } = {}) => ({
   },
 });
 
+exports.loadLess = ()=>({
+  module: {
+    rules: [
+      {
+        test:/\.less$/,
+        use: ['style-loader', 'css-loader', 'less-loader'],
+      }
+    ]
+  }
+})
+

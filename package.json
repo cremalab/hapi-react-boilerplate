@@ -23,7 +23,9 @@
     "postinstall": "npm run build:prod"
   },
   "dependencies": {
+    "antd": "^2.12.0",
     "babel-loader": "^7.1.1",
+    "babel-plugin-import": "^1.2.1",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-polyfill": "^6.23.0",
@@ -33,6 +35,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "boom": "^5.1.0",
     "concurrently": "^3.5.0",
+    "css-loader": "^0.28.4",
     "dotenv": "^4.0.0",
     "extract-text-webpack-plugin": "^2.1.2",
     "friendly-errors-webpack-plugin": "^1.6.1",
@@ -42,6 +45,8 @@
     "good-squeeze": "^5.0.2",
     "hapi": "^16.4.3",
     "hapi-swagger": "^7.7.0",
+    "hapi-webpack-dev-middleware": "^2.0.0",
+    "hapi-webpack-hot-middleware": "^2.0.0",
     "html-webpack-plugin": "^2.29.0",
     "inert": "^4.2.0",
     "joi": "^10.6.0",
@@ -57,6 +62,7 @@
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
     "resource-hints-webpack-plugin": "0.0.1",
+    "style-loader": "^0.18.2",
     "vision": "^4.1.1",
     "webpack": "^3.1.0",
     "webpack-merge": "^4.1.0",
@@ -69,7 +75,9 @@
     "eslint-plugin-jest": "^20.0.3",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.1.0",
-    "jest": "^20.0.4"
+    "jest": "^20.0.4",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.5"
   },
   "jest": {
     "moduleDirectories": [
