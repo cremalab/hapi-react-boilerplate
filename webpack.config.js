@@ -87,14 +87,17 @@ const productionConfig = merge([
   {
     performance: {
       hints: 'warning', // 'error' or false are valid too
-      maxEntrypointSize: 100000, // in bytes
-      maxAssetSize: 450000, // in bytes
+      maxEntrypointSize: 500000, // in bytes
+      maxAssetSize: 1000000, // in bytes
     },
   },
   {
     plugins: [
+      new webpack.optimize.AggressiveMergingPlugin(),//Merge chunks
       new webpack.optimize.CommonsChunkPlugin({
-        name:['vendor']
+        names: ['vendor', 'manifest'],
+        minChunks: Infinity,
+        filename: '[name].[hash].js'
       }),
     ]
   },
