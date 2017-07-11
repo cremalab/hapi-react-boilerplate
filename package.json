@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "npm run server",
+    "dev": "NODE_ENV=dev npm run server",
     "storybook": "start-storybook -p 9001",
     "test": "NODE_ENV=test jest",
     "test:coverage": "npm run test -- --coverage",
@@ -16,9 +16,9 @@
     "test:snapshots:update": "npm run test -- --updateSnapshot",
     "server": "nodemon index.js",
     "client": "NODE_PATH=./src/ npm start --prefix client",
-    "webpack:prod": "rm -rf ./client/build | NODE_ENV=production webpack --env=prod",
-    "build:prod": "npm run webpack:prod -- --progress --profile --colors",
-    "postinstall": "npm run build:prod"
+    "webpack:prod": "rm -rf ./client/build | NODE_ENV=production webpack --env=production",
+    "build:prod": "npm run webpack:production -- --progress --profile --colors",
+    "postinstall": "npm run build:production"
   },
   "dependencies": {
     "babel-core": "^6.25.0",

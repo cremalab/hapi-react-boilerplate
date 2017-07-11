@@ -15,7 +15,6 @@ class RouteHome extends Component {
     return (
       <div>
         <h1>Home Component</h1>
-        <h2>Stuff!</h2>
         <ul>
           { list.map((t, i) => (
             <li key={i}>

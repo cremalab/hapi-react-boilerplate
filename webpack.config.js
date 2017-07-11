@@ -19,18 +19,13 @@ const isProd = env => resolveEnv(env)
 
 const commonConfig = merge({
   entry: {
-    app: PATHS.app,
+    app: [PATHS.app],
     vendor: [
       'babel-polyfill',
       'core-js/es6/promise',
       'whatwg-fetch',
       'react',
     ]
-  },
-  output: {
-    path:PATHS.build,
-    filename: '[name].[hash].js',
-    publicPath: '/public/'
   },
   node: {
     net: 'empty',
@@ -83,6 +78,13 @@ const commonConfig = merge({
 })
 
 const productionConfig = merge([
+  {
+    output: {
+      path:PATHS.build,
+      filename: '[name].[hash].js',
+      publicPath: '/public/'
+    },
+  },
   parts.clean(PATHS.build),
   {
     performance: {
@@ -115,11 +117,6 @@ const productionConfig = merge([
 ])
 
 const developmentConfig = merge([
-  {
-    output: {
-      devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
-    },
-  },
   parts.generateSourceMaps({type:'cheap-module-eval-source-map'}),
   parts.loadImages({
     options: {
@@ -133,9 +130,9 @@ const developmentConfig = merge([
 ])
 
 
-module.exports = (env)=> {
+module.exports = (env) => {
   console.log('ENVIRONMENT ::::::::: >>>>>>> ', env)
-  if(env === 'prod' ){
+  if(env === 'production' ){
     return merge(commonConfig, productionConfig)
   }
   return merge(commonConfig, developmentConfig)
