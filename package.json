@@ -23,7 +23,6 @@
     "postinstall": "npm run build:prod"
   },
   "dependencies": {
-    "antd": "^2.12.0",
     "babel-loader": "^7.1.1",
     "babel-plugin-import": "^1.2.1",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
@@ -75,9 +74,7 @@
     "eslint-plugin-jest": "^20.0.3",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.1.0",
-    "jest": "^20.0.4",
-    "less": "^2.7.2",
-    "less-loader": "^4.0.5"
+    "jest": "^20.0.4"
   },
   "jest": {
     "moduleDirectories": [
