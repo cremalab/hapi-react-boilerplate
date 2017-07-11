@@ -7,8 +7,6 @@ const merge = require('webpack-merge')
 const webpack = require('webpack')
 const parts = require('./webpack.parts')
 
-//https://github.com/raquo/minimal-hapi-react-webpack
-
 const resolveEnv = env => (a, b) =>
   env === 'prod' ? a : b
 
@@ -18,8 +16,8 @@ const PATHS = {
 }
 
 const isProd = env => resolveEnv(env)
-const commonConfig = merge({
 
+const commonConfig = merge({
   entry: {
     app: PATHS.app,
     vendor: [
@@ -30,7 +28,7 @@ const commonConfig = merge({
     ]
   },
   output: {
-    path:path.resolve(__dirname, './client/build'),
+    path:PATHS.build,
     filename: '[name].[hash].js',
     publicPath: '/public/'
   },
@@ -85,8 +83,14 @@ const commonConfig = merge({
 })
 
 const productionConfig = merge([
-
-
+  parts.clean(PATHS.build),
+  {
+    performance: {
+      hints: 'warning', // 'error' or false are valid too
+      maxEntrypointSize: 100000, // in bytes
+      maxAssetSize: 450000, // in bytes
+    },
+  },
   {
     plugins: [
       new webpack.optimize.CommonsChunkPlugin({
@@ -97,7 +101,14 @@ const productionConfig = merge([
   parts.generateSourceMaps({type:'source-map'}),
   parts.loadCSS(),
   parts.loadSVG(),
+  parts.loadImages({
+    options: {
+      limit: 25000,
+      name:'[path][name].[hash].ext'
+    }
+  }),
   parts.loadJavascript({include:PATHS.app, exclude: /(node_modules|bower_components)/}),
+  parts.minifyJavascript()
 ])
 
 const developmentConfig = merge([
@@ -116,8 +127,6 @@ const developmentConfig = merge([
   parts.loadSVG(),
   parts.loadJavascript({include:PATHS.app, exclude: /(node_modules|bower_components)/}),
   parts.loadCSS(),
-  parts.loadLess(),
-
 ])
 
 
