@@ -1,102 +1,142 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+const ResourceHintsWebpackPlugin = require('resource-hints-webpack-plugin')
+const merge = require('webpack-merge')
 const webpack = require('webpack')
+const parts = require('./webpack.parts')
 
 const resolveEnv = env => (a, b) =>
   env === 'prod' ? a : b
 
-module.exports = env => {
-  console.log('Webpack building with env=' + env)
-  const isProd = resolveEnv(env)
-  return {
-    entry: {
-      app: './client/src/index.js',
-      vendor: [
-        'babel-polyfill',
-        'core-js/es6/promise',
-        'whatwg-fetch',
-      ]
+const PATHS = {
+  app: './client/src/index.js',
+  build:path.resolve(__dirname, './client/build')
+}
+
+const isProd = env => resolveEnv(env)
+
+const commonConfig = merge({
+  entry: {
+    app: PATHS.app,
+    vendor: [
+      'babel-polyfill',
+      'core-js/es6/promise',
+      'whatwg-fetch',
+      'react',
+    ]
+  },
+  output: {
+    path:PATHS.build,
+    filename: '[name].[hash].js',
+    publicPath: '/public/'
+  },
+  node: {
+    net: 'empty',
+    tls: 'empty',
+    dns: 'empty'
+  },
+  resolve: {
+    modules: ['node_modules', path.resolve(__dirname, 'client/src')],
+    extensions: ['.webpack.js', '.web.js', '.js', '.jsx'],
+  },
+  plugins: [
+
+    new HtmlWebpackPlugin({
+      template: './client/public/index.html',
+      filename: 'index.html',
+      inject: 'body',
+    }),
+    new ResourceHintsWebpackPlugin(),
+
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.NamedModulesPlugin(),
+    new FriendlyErrorsWebpackPlugin({
+      compilationSuccessInfo: {
+        messages: ['You application is Now ready'],
+        notes: ['Some additionnal notes to be displayed unpon successful compilation']
+      },
+      onErrors: function (severity, errors) {
+        // You can listen to errors transformed and prioritized by the plugin
+        // severity can be 'error' or 'warning'
+        console.log('ERRORS ---> ', errors)
+      },
+      // should the console be cleared between each compilation?
+      // default is true
+      clearConsole: true,
+
+      // add formatters and transformers (see below)
+      additionalFormatters: [],
+      additionalTransformers: []
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+      options: {
+        context: __dirname
+      }
+    }),
+    new ExtractTextPlugin('styles.css'),
+  ],
+
+})
+
+const productionConfig = merge([
+  parts.clean(PATHS.build),
+  {
+    performance: {
+      hints: 'warning', // 'error' or false are valid too
+      maxEntrypointSize: 500000, // in bytes
+      maxAssetSize: 1000000, // in bytes
     },
-    output: {
-      filename: isProd('[name].[hash].js', '[name].js'),
-      path: path.resolve(__dirname, './client/build'),
-      publicPath: '/public/'
-    },
-    node: {
-      net: 'empty',
-      tls: 'empty',
-      dns: 'empty'
-    },
+  },
+  {
     plugins: [
-      new webpack.DefinePlugin({
-        'process.env': {
-          'NODE_ENV': JSON.stringify(isProd('production', 'development'))
-        }
+      new webpack.optimize.AggressiveMergingPlugin(),//Merge chunks
+      new webpack.optimize.CommonsChunkPlugin({
+        names: ['vendor', 'manifest'],
+        minChunks: Infinity,
+        filename: '[name].[hash].js'
       }),
-      ...isProd(
-        [
-          new webpack.optimize.UglifyJsPlugin({
-            comments: false,
-            beautify: false,
-            sourceMap: false,
-            compress: {
-              warnings: false,
-              screw_ie8: true,
-              dead_code: true,
-              unused: true
-            }
-          }) ,
-          new webpack.optimize.AggressiveMergingPlugin(),//Merge chunks
-          new webpack.optimize.CommonsChunkPlugin({
-            names: ['vendor', 'manifest'],
-            minChunks: Infinity,
-            filename: '[name].[hash].js'
-          }),
-        ],
-        []
-      ),
-      new webpack.LoaderOptionsPlugin({
-        minimize: true,
-        debug: false,
-        options: {
-          context: __dirname
-        }
-      }),
-      new HtmlWebpackPlugin({
-        template: './client/public/index.html',
-        filename: 'index.html',
-        inject: 'body',
-      }),
-      new ExtractTextPlugin('styles.css'),
-    ],
-    resolve: {
-      modules: ['node_modules', path.resolve(__dirname, 'client/src')],
-      extensions: ['.webpack.js', '.web.js', '.js', '.jsx'],
+    ]
+  },
+  parts.generateSourceMaps({type:'source-map'}),
+  parts.loadCSS(),
+  parts.loadSVG(),
+  parts.loadImages({
+    options: {
+      limit: 25000,
+      name:'[path][name].[hash].ext'
+    }
+  }),
+  parts.loadJavascript({include:PATHS.app, exclude: /(node_modules|bower_components)/}),
+  parts.minifyJavascript()
+])
+
+const developmentConfig = merge([
+  {
+    output: {
+      devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
     },
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          exclude: /(node_modules|bower_components)/,
-          use: {
-            loader: 'babel-loader',
-          }
-        },
-        {
-          test: /\.css$/,
-          use: ExtractTextPlugin.extract({
-            use: 'css-loader',
-          }),
-        },
-        {
-          test: /\.svg$/,
-          loader: 'svg-sprite-loader?' + JSON.stringify({
-            name: '[name]_[hash]',
-            prefixize: true
-          })
-        }
-      ],
-    },
+  },
+  parts.generateSourceMaps({type:'cheap-module-eval-source-map'}),
+  parts.loadImages({
+    options: {
+      limit: 25000,
+      name:'[path][name].[hash].ext'
+    }
+  }),
+  parts.loadSVG(),
+  parts.loadJavascript({include:PATHS.app, exclude: /(node_modules|bower_components)/}),
+  parts.loadCSS(),
+])
+
+
+module.exports = (env)=> {
+  console.log('ENVIRONMENT ::::::::: >>>>>>> ', env)
+  if(env === 'prod' ){
+    return merge(commonConfig, productionConfig)
   }
+  return merge(commonConfig, developmentConfig)
 }
