@@ -6,9 +6,13 @@
   ],
   "plugins": [
     "syntax-dynamic-import",
-    "transform-object-rest-spread",
+    "transform-object-rest-spread"
   ],
   "env": {
+    "modules":false,
+    "targets":{
+      "browsers": ["last 2 Chrome versions"]
+    },
     "test": {
       "plugins": ["transform-es2015-modules-commonjs"]
     }
