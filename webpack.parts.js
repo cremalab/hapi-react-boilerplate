@@ -1,3 +1,6 @@
+const webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
 exports.devServer = ({host, port}  = {} ) => ({
   devServer: {
     //Enable history API fallback so HTML5 History API based routing works.  Good for more complex setups
@@ -103,7 +106,9 @@ exports.loadCSS = ({ include, exclude } = {}) => ({
         include,
         exclude,
 
-        use: ['style-loader', 'css-loader'],
+        use: new ExtractTextPlugin('styles.css').extract({
+          use: ['style-loader', 'css-loader'],
+        })
       },
     ],
   },
@@ -120,3 +125,12 @@ exports.loadLess = ()=>({
   }
 })
 
+exports.generateSourceMaps = ({type})=>({
+  devtool: type,
+})
+
+exports.extractBundles = (bundles) => ({
+  plugins: bundles.map((bundle) => (
+    new webpack.optimize.CommonsChunkPlugin(bundle)
+  )),
+})

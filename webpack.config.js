@@ -17,24 +17,21 @@ const PATHS = {
   build:path.resolve(__dirname, './client/build')
 }
 
-const isProd = resolveEnv()
-
+const isProd = env => resolveEnv(env)
 const commonConfig = merge({
-  resolve: {
-    modules: ['node_modules', path.resolve(__dirname, 'client/src')],
-    extensions: ['.webpack.js', '.web.js', '.js', '.jsx'],
-  },
+
   entry: {
     app: PATHS.app,
     vendor: [
       'babel-polyfill',
       'core-js/es6/promise',
       'whatwg-fetch',
+      'react',
     ]
   },
   output: {
     path:path.resolve(__dirname, './client/build'),
-    filename: isProd('[name].[hash].js', '[name].js'),
+    filename: '[name].[hash].js',
     publicPath: '/public/'
   },
   node: {
@@ -42,20 +39,19 @@ const commonConfig = merge({
     tls: 'empty',
     dns: 'empty'
   },
-
+  resolve: {
+    modules: ['node_modules', path.resolve(__dirname, 'client/src')],
+    extensions: ['.webpack.js', '.web.js', '.js', '.jsx'],
+  },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify(isProd('production', 'development'))
-      }
-    }),
+
     new HtmlWebpackPlugin({
       template: './client/public/index.html',
       filename: 'index.html',
       inject: 'body',
     }),
     new ResourceHintsWebpackPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
+
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.NamedModulesPlugin(),
     new FriendlyErrorsWebpackPlugin({
@@ -75,14 +71,42 @@ const commonConfig = merge({
       // add formatters and transformers (see below)
       additionalFormatters: [],
       additionalTransformers: []
-    })
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+      options: {
+        context: __dirname
+      }
+    }),
+    new ExtractTextPlugin('styles.css'),
   ],
 
 })
 
-const productionConfig = merge([])
+const productionConfig = merge([
+
+
+  {
+    plugins: [
+      new webpack.optimize.CommonsChunkPlugin({
+        name:['vendor']
+      }),
+    ]
+  },
+  parts.generateSourceMaps({type:'source-map'}),
+  parts.loadCSS(),
+  parts.loadSVG(),
+  parts.loadJavascript({include:PATHS.app, exclude: /(node_modules|bower_components)/}),
+])
 
 const developmentConfig = merge([
+  {
+    output: {
+      devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
+    },
+  },
+  parts.generateSourceMaps({type:'cheap-module-eval-source-map'}),
   parts.loadImages({
     options: {
       limit: 25000,
@@ -92,13 +116,14 @@ const developmentConfig = merge([
   parts.loadSVG(),
   parts.loadJavascript({include:PATHS.app, exclude: /(node_modules|bower_components)/}),
   parts.loadCSS(),
-  parts.loadLess()
+  parts.loadLess(),
+
 ])
 
 
 module.exports = (env)=> {
-  console.log('ENV: ', env)
-  if(env === 'production' ){
+  console.log('ENVIRONMENT ::::::::: >>>>>>> ', env)
+  if(env === 'prod' ){
     return merge(commonConfig, productionConfig)
   }
   return merge(commonConfig, developmentConfig)
