@@ -14,13 +14,14 @@ class RouteHome extends Component {
     const { list } = this.props.tasks
     return (
       <div>
-        <h1>Home component!</h1>
+        <h1>Home Component</h1>
         <ul>
           { list.map((t, i) => (
             <li key={i}>
               <input type='checkbox' checked={t.completed} />
               &nbsp;
               {t.title}
+              &nbsp;
             </li>
           ))}
         </ul>

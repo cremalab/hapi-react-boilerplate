@@ -1,7 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Root from './Root'
-import styles from './styles/index.css'
+import { AppContainer } from 'react-hot-loader'
 
-const rootElement = document.getElementById('root')
-ReactDOM.render( <Root />, rootElement )
+const render = Component => {
+  ReactDOM.render(
+    <AppContainer>
+      <Component />
+    </AppContainer>,
+    document.getElementById('root')
+  )
+}
+
+render(Root)
+
+if (module.hot) {
+  module.hot.accept('./Root', () => { render(Root) })
+}

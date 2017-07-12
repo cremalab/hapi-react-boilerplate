@@ -25,7 +25,12 @@ const manifest = {
   registrations: [
     { plugin: 'inert' }, // File/directory handlers for Hapi
     { plugin: 'vision' }, // View/templates for Hapi
-    { plugin: './server/clientApp' }, // Routes/handler for serving the React App
+    {
+      plugin: {
+        register: './server/clientApp',
+        options: { hmr: true },
+      }
+    }, // Routes/handler for serving the React App
     { plugin: './server/tasks' }, // Routes/handlers for Tasks - REMOVE
   ],
 }
