@@ -143,11 +143,3 @@ export default handleActions({
 # Deployment
 This boilerplate was built to deploy to Heroku with little fuss. A `postinstall` npm command will build a production version of the app to be served from `client/build`. It should work as expected without any further configuration.
 
-# TODO
-* [x] Example Smoke tests for React Components
-* [x] Example tests for API routes
-* [x] Deployment docs
-* [x] Docs on generating Swagger Docs
-* [x] HMR
-* [ ] Basic Auth Plugin example
-* [x] Documentation for React/Redux practices
