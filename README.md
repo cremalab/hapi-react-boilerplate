@@ -31,11 +31,11 @@ A boilerplate project for a [Hapi](http://hapijs.com)-powered web/api server ser
 # JSON API/File server
 
 ### Plugins
-Create a plugin for each logical grouping of features for the application and register them in the server manifest. A plugin lives at the top level of the `/server` directory and has an `index.js` file that exports a registration function. The rest of the folder structure is up to the requirements of the app, but it's recommended to do something similar to this:
+Create a plugin for your application and each _large_ logical grouping of features and register them in the server manifest. Refer to the author of Hapi's [guidelines for using plugins](https://gist.github.com/hueniverse/f01faf422eb038d87d57#file-plugins-md) when thinking about how to structure your app. A plugin lives at the top level of the `/server` directory and has an `index.js` file that exports a registration function. The rest of the folder structure is up to the requirements of the app, but it's recommended to do something similar to this:
 
 ```
 /server
-  /tasks
+  /tasksApp
     /db - database operations for tasks
       tasksSchemas.js
       tasksDB.js
