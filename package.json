@@ -18,7 +18,7 @@
     "client": "NODE_PATH=./src/ npm start --prefix client",
     "webpack:prod": "rm -rf ./client/build | NODE_ENV=production webpack --env=production",
     "build:prod": "npm run webpack:production -- --progress --profile --colors",
-    "postinstall": "npm run build:production"
+    "postinstall": "npm run build:prod"
   },
   "dependencies": {
     "babel-core": "^6.25.0",
