@@ -17,65 +17,73 @@ const PATHS = {
 
 const isProd = env => resolveEnv(env)
 
-const commonConfig = merge({
-  entry: {
-    app: [PATHS.app],
-    vendor: [
-      'babel-polyfill',
-      'core-js/es6/promise',
-      'whatwg-fetch',
-      'react',
+const commonConfig = merge([
+  {
+    entry: {
+      app: [PATHS.app],
+      vendor: [
+        'babel-polyfill',
+        'core-js/es6/promise',
+        'whatwg-fetch',
+        'react',
+      ]
+    },
+    node: {
+      net: 'empty',
+      tls: 'empty',
+      dns: 'empty'
+    },
+    resolve: {
+      modules: ['node_modules', path.resolve(__dirname, 'client/src')],
+      extensions: ['.webpack.js', '.web.js', '.js', '.jsx'],
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: './client/public/index.html',
+        filename: 'index.html',
+        inject: 'body',
+      }),
+      new ResourceHintsWebpackPlugin(),
+      new webpack.NoEmitOnErrorsPlugin(),
+      new webpack.NamedModulesPlugin(),
+      new FriendlyErrorsWebpackPlugin({
+        compilationSuccessInfo: {
+          messages: ['You application is Now ready'],
+          notes: ['Some additionnal notes to be displayed unpon successful compilation']
+        },
+        onErrors: function (severity, errors) {
+          // You can listen to errors transformed and prioritized by the plugin
+          // severity can be 'error' or 'warning'
+          console.log('ERRORS ---> ', errors)
+        },
+        // should the console be cleared between each compilation?
+        // default is true
+        clearConsole: true,
+
+        // add formatters and transformers (see below)
+        additionalFormatters: [],
+        additionalTransformers: []
+      }),
+      new webpack.LoaderOptionsPlugin({
+        minimize: true,
+        debug: false,
+        options: {
+          context: __dirname
+        }
+      }),
+      new ExtractTextPlugin('styles.css'),
     ]
   },
-  node: {
-    net: 'empty',
-    tls: 'empty',
-    dns: 'empty'
-  },
-  resolve: {
-    modules: ['node_modules', path.resolve(__dirname, 'client/src')],
-    extensions: ['.webpack.js', '.web.js', '.js', '.jsx'],
-  },
-  plugins: [
-
-    new HtmlWebpackPlugin({
-      template: './client/public/index.html',
-      filename: 'index.html',
-      inject: 'body',
-    }),
-    new ResourceHintsWebpackPlugin(),
-
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.NamedModulesPlugin(),
-    new FriendlyErrorsWebpackPlugin({
-      compilationSuccessInfo: {
-        messages: ['You application is Now ready'],
-        notes: ['Some additionnal notes to be displayed unpon successful compilation']
-      },
-      onErrors: function (severity, errors) {
-        // You can listen to errors transformed and prioritized by the plugin
-        // severity can be 'error' or 'warning'
-        console.log('ERRORS ---> ', errors)
-      },
-      // should the console be cleared between each compilation?
-      // default is true
-      clearConsole: true,
-
-      // add formatters and transformers (see below)
-      additionalFormatters: [],
-      additionalTransformers: []
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false,
-      options: {
-        context: __dirname
-      }
-    }),
-    new ExtractTextPlugin('styles.css'),
-  ],
-
-})
+  parts.loadCSS(),
+  parts.loadSVG(),
+  parts.loadImages({
+    options: {
+      limit: 25000,
+      name:'[path][name].[hash].ext'
+    }
+  }),
+  parts.loadJavascript({include:PATHS.app, exclude: /(node_modules|bower_components)/}),
+])
 
 const productionConfig = merge([
   {
@@ -87,46 +95,21 @@ const productionConfig = merge([
   },
   parts.clean(PATHS.build),
   {
-    performance: {
-      hints: 'warning', // 'error' or false are valid too
-      maxEntrypointSize: 500000, // in bytes
-      maxAssetSize: 1000000, // in bytes
-    },
-  },
-  {
     plugins: [
       new webpack.optimize.AggressiveMergingPlugin(),//Merge chunks
       new webpack.optimize.CommonsChunkPlugin({
         names: ['vendor', 'manifest'],
         minChunks: Infinity,
-        filename: '[name].[hash].js'
+        filenamejkjkjkhjkghjghjgjkjlhhhj: '[name].[hash].js'
       }),
     ]
   },
   parts.generateSourceMaps({type:'source-map'}),
-  parts.loadCSS(),
-  parts.loadSVG(),
-  parts.loadImages({
-    options: {
-      limit: 25000,
-      name:'[path][name].[hash].ext'
-    }
-  }),
-  parts.loadJavascript({include:PATHS.app, exclude: /(node_modules|bower_components)/}),
   parts.minifyJavascript()
 ])
 
 const developmentConfig = merge([
   parts.generateSourceMaps({type:'cheap-module-eval-source-map'}),
-  parts.loadImages({
-    options: {
-      limit: 25000,
-      name:'[path][name].[hash].ext'
-    }
-  }),
-  parts.loadSVG(),
-  parts.loadJavascript({include:PATHS.app, exclude: /(node_modules|bower_components)/}),
-  parts.loadCSS(),
 ])
 
 
